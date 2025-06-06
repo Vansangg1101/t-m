@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heart with Dynamic Background</title>
+<style>
+  body, html {
+    margin: 0; padding: 0; overflow: hidden;
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #cfd9df);
+    background-size: 600% 600%;
+    animation: gradientBG 10s ease infinite;
+  }
+  @keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+  canvas {
+    display: block; margin: auto;
+  }
+</style>
+</head>
+<body>
+<canvas id="heartCanvas"></canvas>
+<script>
+  const canvas = document.getElementById('heartCanvas');
+  const ctx = canvas.getContext('2d');
+  let w = window.innerWidth, h = window.innerHeight;
+  canvas.width = w; canvas.height = h;
+
+  function drawHeart(x, y, s) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.bezierCurveTo(x, y - s / 2, x - s, y - s / 2, x - s, y);
+    ctx.bezierCurveTo(x - s, y + s, x, y + s * 1.5, x, y + s * 2);
+    ctx.bezierCurveTo(x, y + s * 1.5, x + s, y + s, x + s, y);
+    ctx.bezierCurveTo(x + s, y - s / 2, x, y - s / 2, x, y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(255, 50, 80, 0.7)';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    const t = Date.now() * 0.002;
+    const size = 60 + Math.sin(t) * 10;
+    drawHeart(w / 2, h / 2 - size / 2, size);
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', () => {
+    w = window.innerWidth; h = window.innerHeight;
+    canvas.width = w; canvas.height = h;
+  });
+
+  animate();
+</script>
+</body>
+</html>
